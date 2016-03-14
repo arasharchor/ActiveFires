@@ -201,7 +201,7 @@ Item {
                 anchors.top: parent.bottom
                 anchors.topMargin: 5
                 font.pointSize: 9
-                text: "1 hour"
+                text: hourSlider.minimumValue === 1? 1 + " hour" : hourSlider.minimumValue + " hours"
             }
 
             Text {
@@ -210,7 +210,7 @@ Item {
                 anchors.top: parent.bottom
                 anchors.topMargin: 5
                 font.pointSize: 9
-                text: "24 hours"
+                text: hourSlider.maximumValue + " hours"
             }
 
             MouseArea {
@@ -239,10 +239,11 @@ Item {
 
             onPressedChanged: {
                 // TODO:
-                // - Check if there is an onRelease
                 // - Create updateData function for map
-                map.getData(map.dataUrl)
-                //map.updateData()
+                if (!pressed) {
+                    map.getData(map.dataUrl)
+                    //map.updateData()
+                }
             }
 
         }
