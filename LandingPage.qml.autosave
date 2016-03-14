@@ -46,6 +46,7 @@ Item {
             ImageButton {
                 id: playButton
                 anchors.centerIn: parent
+                anchors.verticalCenter: parent
                 width: 160 * AppFramework.displayScaleFactor
                 height: 80 * AppFramework.displayScaleFactor
                 source: "assets/images/startbutton.png"

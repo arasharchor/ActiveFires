@@ -16,7 +16,6 @@
 
 import QtQuick 2.3
 import QtQuick.Controls 1.2
-import QtPositioning 5.3
 
 import ArcGIS.AppFramework 1.0
 
@@ -39,7 +38,7 @@ App {
         id: landingPage
 
         LandingPage {
-            onSignInClicked: {
+            onPlayButtonClicked: {
                 stackView.push(mapPage)
             }
         }
@@ -49,13 +48,6 @@ App {
         id: mapPage
 
         MapPage {
-        }
-    }
-
-    Component {
-        id: statsPage
-
-        StatsPage {
         }
     }
 
