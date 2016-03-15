@@ -182,6 +182,7 @@ Item {
         Slider {
             id: hourSlider
             property double defaultOpacity: 0.4
+            property int initialValue: 12
 
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top
@@ -189,7 +190,7 @@ Item {
             tickmarksEnabled : true
             updateValueWhileDragging : true
             opacity: defaultOpacity
-            value: 12
+            value: initialValue
             maximumValue: 24
             minimumValue: 1
             stepSize: 1
@@ -241,8 +242,8 @@ Item {
                 // TODO:
                 // - Create updateData function for map
                 if (!pressed) {
-                    map.getData(map.dataUrl)
-                    //map.updateData()
+                    //map.getData(map.dataUrl)
+                    map.updateData(hourSlider.value)
                 }
             }
 
@@ -265,6 +266,66 @@ Item {
             if(status === Enums.MapStatusReady) {
                 getData(map.dataUrl)
             }
+        }
+
+        function updateData(newHour) {
+            var graphics_list = mainGraphicLayer.graphics
+            // Get record_age of oldest graphic.
+            // It is the first graphic from the bottom
+            // that has a record age > 3 hours (record ages of 3 hours were added last)
+            var latest_hour = null//graphics_list[graphics_list.length - 1].attributes.record_age
+            var latest_hour_index = null//graphics_list.length - 1
+
+            for (var m = graphics_list.length; m-- > 0;) {
+                if (graphics_list[m].attributes.record_age > 3 && graphics_list[m].visible){
+                    latest_hour = graphics_list[m].attributes.record_age
+                    latest_hour_index = m
+                    break
+                }
+            }
+
+            // if still no latest_hour get the last visible graphic as latest
+            if (latest_hour == null) {
+                for (var q = graphics_list.length; q-- > 0;) {
+                    if (graphics_list[q].visible){
+                        latest_hour = graphics_list[q].attributes.record_age
+                        latest_hour_index = q
+                        break
+                    }
+                }
+            }
+
+            // if still no latest_hour, set it to 1
+            if (latest_hour == null) {
+                latest_hour = hourSlider.minimumValue
+                latest_hour_index = 0
+            }
+
+            if (newHour < latest_hour) {
+
+                //console.log("LESS THAN")
+                // hide all graphics with record hour > newHour
+                for (var n = 0; n < graphics_list.length; n++) {
+                    if (graphics_list[n].attributes.record_age > newHour && graphics_list[n].visible) {
+                        graphics_list[n].visible = false
+                    }
+                }
+            } else if (newHour > latest_hour) {
+                // Make visible any graphics that may have been hidden
+                var data_already_on_map = false
+                for (var o = 0; o < graphics_list.length; o++){
+                    if (graphics_list[o].attributes.record_age <= newHour && !graphics_list[o].visible) {
+                        graphics_list[o].visible = true
+                        if (graphics_list[o].attributes.record_age === newHour) {
+                            data_already_on_map = true
+                        }
+                    }
+                }
+                if (!data_already_on_map) {
+                    map.getData(map.dataUrl)
+                }
+            } // else do nothing if equal
+
         }
 
         function getData(currentURL) {
@@ -298,7 +359,6 @@ Item {
                 pt_wgs84.x = pt_str[0]
                 pt_wgs84.y = pt_str[1]
 
-                //TODO: Project the data in python before mapping here
                 graphic.geometry = pt_wgs84.project(map.spatialReference);
                 graphic.attributes = attr;
                 graphic.symbol = gp
@@ -314,7 +374,7 @@ Item {
 
             for (var i=0; i<data.features.length; i++) {
                 var record_age = data.features[i].properties.record_age
-                if (record_age === hourSlider.value) {
+                if (record_age > hourSlider.value) {
                     break
                 }
                 if (record_age < 4) {
@@ -323,6 +383,7 @@ Item {
                     add(data.features[i], fireSymbol)
                 }
             }
+            console.log(record_age)
 
             for (var k=0; k<recent_fires.length; k++) {
                 add(recent_fires[k], recentFireSymbol)
