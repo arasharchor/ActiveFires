@@ -1,51 +1,56 @@
 {
-    "access": "public",
+    "access": "private",
     "accessInformation": null,
     "appCategories": [
     ],
     "avgRating": 0,
     "banner": null,
     "commentsEnabled": true,
-    "created": 1441009698000,
+    "created": 1458877381000,
     "culture": "en-au",
     "description": "\n<p style=' margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;'><span style=' font-family:'>ActiveFires app based on the ArcGIS Runtime for QML API</span></p>",
     "documentation": null,
     "extent": [
     ],
     "guid": null,
-    "id": null,
+    "id": "4a79b3b345d249ef903619ddd063fa22",
     "industries": [
     ],
+    "itemControl": "admin",
     "languages": [
     ],
     "largeThumbnail": null,
     "licenseInfo": "\n<p style='-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'><br /></p>",
     "listed": false,
-    "modified": 1446437586000,
-    "name": null,
-    "numComments": 1,
+    "modified": 1462148656000,
+    "name": "4a79b3b345d249ef903619ddd063fa22.zip",
+    "numComments": 21,
     "numRatings": 0,
-    "numViews": 447,
-    "orgId": "2U3NfasNQ9o9LkLt",
-    "owner": null,
+    "numViews": 51,
+    "owner": "arcgis_pro",
     "ownerFolder": null,
     "properties": null,
+    "protected": false,
     "screenshots": [
     ],
-    "size": 285164,
+    "size": 221808,
     "snippet": "ActiveFires apps using the Runtime for QML API",
     "spatialReference": null,
-    "tags": null,
+    "tags": [
+        "forest fires"
+    ],
     "thumbnail": "thumbnail/thumbnail.png",
     "title": "ActiveFires",
     "type": "Native Application",
     "typeKeywords": [
+        "API_QML",
         "App",
         "Application",
         "AppStudio",
         "Configuration",
         "Native",
-        "qml"
+        "qml",
+        "Registered App"
     ],
     "url": null
 }

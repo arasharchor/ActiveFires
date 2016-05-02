@@ -15,40 +15,51 @@
  */
 
 import QtQuick 2.3
+import QtQuick.Window 2.2
 import QtQuick.Controls 1.2
+
 
 import ArcGIS.AppFramework 1.0
 
 //------------------------------------------------------------------------------
 
 App {
-    property color themeColor: "#5F9EA0"
-
     id: app
-    width: 640
-    height: 480
 
-    StackView {
-        id: stackView
+    property double scaleFactor: AppFramework.displayScaleFactor
+    property int deviceWidth: 360
+    property int deviceHeight: 640
+
+    property string appName: qsTr("ActiveFires")
+
+    property url dataUrl: "http://ljumbam.webfactional.com/ActiveFires.geojson"
+
+    property color themeColor: "#6D4C41"
+    property color secondaryColor: "#EFEBE9"
+    property color backgroundColor: secondaryColor
+    property color darkerThemeColor: "#3E2723"
+    property color baseFontColor: "#FFFFFF"
+    property color appLabelColor: "#4c0000"
+    property color shadowColor: Qt.rgba(0, 0, 0, 0.3)
+
+    property int baseFontSize: Math.round(20 * scaleFactor)
+    property alias mainFontFamily: fontSourceSansProReg
+
+    property string imgFolder: "assets/img/%1"
+
+    property real defaultMargins: 10 * scaleFactor
+
+    width: deviceWidth
+    height: deviceHeight
+
+    FontLoader {
+        id: fontSourceSansProReg
+        source: app.folder.fileUrl("assets/fonts/SourceSansPro-Regular.ttf")
+    }
+
+    SplashPage {
+        id: splashPage
         anchors.fill: parent
-        initialItem: landingPage
-    }
-
-    Component {
-        id: landingPage
-
-        LandingPage {
-            onPlayButtonClicked: {
-                stackView.push(mapPage)
-            }
-        }
-    }
-
-    Component {
-        id: mapPage
-
-        MapPage {
-        }
     }
 
 }

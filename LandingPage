@@ -1,0 +1,39 @@
+import QtQuick 2.3
+
+
+Item {
+    id: transitionPage
+
+    property string logoPath: "thumbnail.png"
+
+    width: parent.width
+    height: parent.height
+
+    Rectangle {
+        id: transitionPageContent
+
+        anchors.fill: parent
+        color: app.backgroundColor
+
+        Image {
+            id: logoImage
+
+            source: logoPath
+            anchors.centerIn: parent
+            fillMode: Image.PreserveAspectFit
+        }
+
+        Text {
+            id: appName
+
+            anchors.top: logoImage.bottom
+            anchors.margins: app.defaultMargins
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: "%1 %2".arg(app.appName).arg(app.info.version)
+            font.bold: true
+            font.pixelSize: app.baseFontSize
+            font.family: app.mainFontFamily.name
+            color: app.appLabelColor
+        }
+    }
+}
