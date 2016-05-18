@@ -62,16 +62,6 @@ Item {
             Layout.preferredHeight: 60 * scaleFactor
             z: 30
 
-            DropShadow {
-                anchors.fill: headerBar
-                horizontalOffset: 1
-                verticalOffset: 4
-                radius: 8.0
-                samples: 16
-                color: shadowColor
-                source: headerBar
-            }
-
             MouseArea {
                 anchors.fill: parent
                 propagateComposedEvents: true
