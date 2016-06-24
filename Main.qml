@@ -15,7 +15,6 @@
  */
 
 import QtQuick 2.3
-import QtQuick.Window 2.2
 import QtQuick.Controls 1.2
 
 
@@ -26,40 +25,25 @@ import ArcGIS.AppFramework 1.0
 App {
     id: app
 
-    property double scaleFactor: AppFramework.displayScaleFactor
-    property int deviceWidth: 360
-    property int deviceHeight: 640
+    width: config.deviceWidth
+    height: config.deviceHeight
 
-    property string appName: qsTr("ActiveFires")
-
-    property url dataUrl: "http://ljumbam.webfactional.com/ActiveFires.geojson"
-
-    property color themeColor: "#6D4C41"
-    property color secondaryColor: "#EFEBE9"
-    property color backgroundColor: secondaryColor
-    property color darkerThemeColor: "#3E2723"
-    property color baseFontColor: "#FFFFFF"
-    property color appLabelColor: "#4c0000"
-    property color shadowColor: Qt.rgba(0, 0, 0, 0.3)
-
-    property int baseFontSize: Math.round(20 * scaleFactor)
-    property alias mainFontFamily: fontSourceSansProReg
-
-    property string imgFolder: "assets/img/%1"
-
-    property real defaultMargins: 10 * scaleFactor
-
-    width: deviceWidth
-    height: deviceHeight
-
-    FontLoader {
-        id: fontSourceSansProReg
-        source: app.folder.fileUrl("assets/fonts/SourceSansPro-Regular.ttf")
+    property alias config: config
+    Config {
+        id: config
     }
 
-    SplashPage {
-        id: splashPage
+    StackView {
+        id: stackview
         anchors.fill: parent
+        initialItem: splashPage
+    }
+
+    Component {
+        id: splashPage
+        SplashPage {
+            anchors.fill: parent
+        }
     }
 
 }

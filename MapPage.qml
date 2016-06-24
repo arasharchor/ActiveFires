@@ -1,26 +1,17 @@
 import QtQuick 2.3
-import QtPositioning 5.2
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 1.4
 import QtGraphicalEffects 1.0
 import QtQuick.Controls.Styles 1.4
 
 
-import ArcGIS.AppFramework 1.0
 import ArcGIS.AppFramework.Runtime 1.0
 import ArcGIS.AppFramework.Controls 1.0
-import ArcGIS.AppFramework.Runtime.Controls 1.0
 
 
-import "components"
+import "components" as Components
+import "components/ModalWindow" as ModalWindow
 
-// TODO: Fix text jumbling up in modal window header
-//       Add location
-//       Limit pan of map
-//       Create config folder with common styles
-//       ModalWindow and img in folder of its on
-//       Grow modal window from point of clicked
-//       Correct record_age in script to round up time properly
 
 Item {
 
@@ -30,9 +21,9 @@ Item {
     signal aboutButtonClicked()
 
     function defaultView() {
-        if (sliderDisplay.y != 0) { sliderDisplay.y = 0 }
+        if (sliderDisplay.y !== 0) { sliderDisplay.y = 0 }
         if (modal.visible) { modal.visible = false }
-        if (menuWindow.x != app.width) {
+        if (menuWindow.x !== app.width) {
             menuWindow.x = app.width
             mapShadow.visible = false
         }
@@ -49,13 +40,13 @@ Item {
         id: header
         anchors.top: parent.top
         width: parent.width
-        height: 60 * app.scaleFactor
-        color: app.themeColor
+        height: app.config.scale(60)
+        color: app.config.themeColor
         z: 30 // keeps the shadow visible
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: false
-            color: app.shadowColor
+            color: app.config.shadowColor
             verticalOffset: 4
             horizontalOffset: 1
             samples: 20
@@ -65,16 +56,16 @@ Item {
 
         ImageButton {
             id: sliderButton
-            width: 38.4 * app.scaleFactor
-            height: 38.4 * app.scaleFactor
+            width: app.config.scale(38.4)
+            height: app.config.scale(38.4)
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            anchors.margins: app.defaultMargins
+            anchors.margins: app.config.defaultMargins
             checkedColor : "transparent"
-            pressedColor : app.secondaryColor
+            pressedColor : app.config.secondaryColor
             hoverColor : "transparent"
             glowColor : "transparent"
-            source: app.imgFolder.arg("slider_xxxhdpi.png")
+            source: app.config.imgFolder.arg("slider_xxxhdpi.png")
 
             onClicked: {
                 mapPage.defaultView() // First hide other open windows
@@ -86,12 +77,12 @@ Item {
             id: sliderLabel
 
             anchors.centerIn: parent
-            width: parent.width - menuButton.width - sliderButton.width - 8.5*app.defaultMargins
+            width: parent.width - menuButton.width - sliderButton.width - 8.5*app.config.defaultMargins
             color: "white"
-            font.pixelSize: app.baseFontSize
+            font.pixelSize: app.config.baseFontSize
             font.bold: true
-            font.family: app.mainFontFamily.name
-            Layout.minimumWidth: 40 * app.scaleFactor
+            font.family: app.config.mainFontFamily.name
+            Layout.minimumWidth: app.config.scale(40)
             wrapMode: Text.WordWrap
             horizontalAlignment: Text.AlignHCenter
             function setText (hour) {
@@ -107,20 +98,20 @@ Item {
 
         ImageButton {
             id: menuButton
-            width: 38.4 * app.scaleFactor
-            height: 38.4 * app.scaleFactor
+            width: app.config.scale(38.4)
+            height: app.config.scale(38.4)
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            anchors.margins: app.defaultMargins
+            anchors.margins: app.config.defaultMargins
             checkedColor : "transparent"
-            pressedColor : app.secondaryColor
+            pressedColor : app.config.secondaryColor
             hoverColor : "transparent"
             glowColor : "transparent"
-            source: app.imgFolder.arg("menu_xxxhdpi.png")
+            source: app.config.imgFolder.arg("menu_xxxhdpi.png")
 
             onClicked: {
                 mapPage.defaultView() // First hide other open windows
-                if (menuWindow.x == app.width) {
+                if (menuWindow.x === app.width) {
                     menuWindow.x = app.width - menuWindow.width
                     mapShadow.visible = true
                 } else {
@@ -136,15 +127,15 @@ Item {
 
         anchors.top: header.bottom
         anchors.bottom: parent.bottom
-        width: Math.min(app.width - 60 * scaleFactor, 288 * scaleFactor)
+        width: Math.min(app.width - app.config.scale(60), app.config.scale(288))
         z: 20
-        color: app.secondaryColor
-        border.color: app.themeColor
-        border.width: 1 * app.scaleFactor
+        color: app.config.secondaryColor
+        border.color: app.config.themeColor
+        border.width: app.config.scale(1)
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: false
-            color: app.shadowColor
+            color: app.config.shadowColor
             verticalOffset: 3
             horizontalOffset: 1
             samples: 20
@@ -156,11 +147,11 @@ Item {
             id: notification
 
             //radius: 5
-            //color: app.shadowColor
+            //color: app.config.shadowColor
             width: 0.97 * parent.width
-            anchors.margins: app.defaultMargins/2.5
+            anchors.margins: app.config.defaultMargins/2.5
             anchors.horizontalCenter: parent.horizontalCenter
-            height: 80 * app.scaleFactor
+            height: app.config.scale(80)
             style: ButtonStyle {
                 background: Rectangle {
                     color: "grey"
@@ -169,26 +160,26 @@ Item {
 
             Image {
                 id: notificationImg
-                source: app.imgFolder.arg("notification_xxxhdpi.png")
-                width: 38.4 * app.scaleFactor
-                height: 38.4 * app.scaleFactor
+                source: app.config.imgFolder.arg("notification_xxxhdpi.png")
+                width: app.config.scale(38.4)
+                height: app.config.scale(38.4)
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
-                anchors.margins: app.defaultMargins
+                anchors.margins: app.config.defaultMargins
             }
 
             Column {
                 anchors.left: notificationImg.right
-                anchors.margins: app.defaultMargins
+                anchors.margins: app.config.defaultMargins
                 anchors.verticalCenter: parent.verticalCenter
 
                 Text {
                     text: qsTr("Notifications")
                     color: "white"
-                    font.pixelSize: 1.2 * app.baseFontSize
+                    font.pixelSize: 1.2 * app.config.baseFontSize
                     font.bold: true
-                    font.family: app.mainFontFamily.name
-                    Layout.minimumWidth: 40 * app.scaleFactor
+                    font.family: app.config.mainFontFamily.name
+                    Layout.minimumWidth: app.config.scale(40)
                 }
 
                 RowLayout {
@@ -198,14 +189,14 @@ Item {
                     RadioButton {
                         id: onButton
                         exclusiveGroup: tabPositionGroup
-                        Layout.minimumWidth: 45 * app.scaleFactor
+                        Layout.minimumWidth: app.config.scale(45)
                         style: RadioButtonStyle {
                             label: Label {
                                 text: qsTr("On")
-                                color: app.secondaryColor
-                                font.pixelSize: 0.8 * app.baseFontSize
+                                color: app.config.secondaryColor
+                                font.pixelSize: 0.8 * app.config.baseFontSize
                                 font.bold: true
-                                font.family: app.mainFontFamily.name
+                                font.family: app.config.mainFontFamily.name
                             }
                         }
                     }
@@ -213,14 +204,14 @@ Item {
                         id: offButton
                         checked: true
                         exclusiveGroup: tabPositionGroup
-                        Layout.minimumWidth: 45 * app.scaleFactor
+                        Layout.minimumWidth: app.config.scale(45)
                         style: RadioButtonStyle {
                             label: Label {
                                 text: qsTr("Off")
-                                color: app.secondaryColor
-                                font.pixelSize: 0.8 * app.baseFontSize
+                                color: app.config.secondaryColor
+                                font.pixelSize: 0.8 * app.config.baseFontSize
                                 font.bold: true
-                                font.family: app.mainFontFamily.name
+                                font.family: app.config.mainFontFamily.name
                             }
                         }
                     }
@@ -232,12 +223,12 @@ Item {
             id: about
 
             //radius: 5
-            //color: app.shadowColor
+            //color: app.config.shadowColor
             width: 0.97 * parent.width
-            anchors.margins: app.defaultMargins/2.5
+            anchors.margins: app.config.defaultMargins/2.5
             anchors.top: notification.bottom
             anchors.horizontalCenter: parent.horizontalCenter
-            height: 80 * app.scaleFactor
+            height: app.config.scale(80)
             style: ButtonStyle {
                 background: Rectangle {
                     color: "grey"
@@ -246,26 +237,26 @@ Item {
 
             Image {
                 id: aboutImg
-                source: app.imgFolder.arg("about_xxxhdpi.png")
-                width: 38.4 * app.scaleFactor
-                height: 38.4 * app.scaleFactor
+                source: app.config.imgFolder.arg("about_xxxhdpi.png")
+                width: app.config.scale(38.4)
+                height: app.config.scale(38.4)
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
-                anchors.margins: app.defaultMargins
+                anchors.margins: app.config.defaultMargins
             }
 
             Column {
                 anchors.left: aboutImg.right
-                anchors.margins: app.defaultMargins
+                anchors.margins: app.config.defaultMargins
                 anchors.verticalCenter: parent.verticalCenter
 
                 Text {
                     text: qsTr("About")
                     color: "white"
-                    font.pixelSize: 1.2 * app.baseFontSize
+                    font.pixelSize: 1.2 * app.config.baseFontSize
                     font.bold: true
-                    font.family: app.mainFontFamily.name
-                    Layout.minimumWidth: 40 * app.scaleFactor
+                    font.family: app.config.mainFontFamily.name
+                    Layout.minimumWidth: app.config.scale(40)
                 }
             }
 
@@ -290,7 +281,7 @@ Item {
         visible: false
         sourceComponent: Rectangle {
             anchors.fill: parent
-            color: app.secondaryColor
+            color: app.config.secondaryColor
             MouseArea {
                 anchors.fill: parent
                 propagateComposedEvents: false
@@ -299,13 +290,13 @@ Item {
                 id: menuHeader
                 anchors.top: parent.top
                 width: parent.width
-                height: 60 * app.scaleFactor
-                color: app.themeColor
+                height: app.config.scale(60)
+                color: app.config.themeColor
                 z: 30 // keeps the shadow visible
                 layer.enabled: true
                 layer.effect: DropShadow {
                     transparentBorder: false
-                    color: app.shadowColor
+                    color: app.config.shadowColor
                     verticalOffset: 4
                     horizontalOffset: 1
                     samples: 20
@@ -315,16 +306,16 @@ Item {
 
                 ImageButton {
                     id: arrowLeft
-                    width: 38.4 * app.scaleFactor
-                    height: 38.4 * app.scaleFactor
+                    width: app.config.scale(38.4)
+                    height: app.config.scale(38.4)
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
-                    anchors.margins: app.defaultMargins
+                    anchors.margins: app.config.defaultMargins
                     checkedColor : "transparent"
-                    pressedColor : app.secondaryColor
+                    pressedColor : app.config.secondaryColor
                     hoverColor : "transparent"
                     glowColor : "transparent"
-                    source: app.imgFolder.arg("arrow_left_xxxhdpi.png")
+                    source: app.config.imgFolder.arg("arrow_left_xxxhdpi.png")
 
                     onClicked: {
                         aboutPage.visible = false
@@ -335,9 +326,9 @@ Item {
                     text: qsTr("About")
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: arrowLeft.right
-                    font.pixelSize: 1.2 * app.baseFontSize
+                    font.pixelSize: 1.2 * app.config.baseFontSize
                     font.bold: true
-                    font.family: app.mainFontFamily.name
+                    font.family: app.config.mainFontFamily.name
                     width: 0.7 * parent.width
                     horizontalAlignment: Text.AlignHCenter
                     color: "white"
@@ -349,14 +340,14 @@ Item {
                 text: "ActiveFires %1".arg(app.info.version)
                 width: 0.8 * parent.width
                 anchors.top: menuHeader.bottom
-                anchors.margins: app.defaultMargins
+                anchors.margins: app.config.defaultMargins
                 anchors.horizontalCenter: parent.horizontalCenter
-                font.family: app.mainFontFamily.name
-                font.pixelSize: 1.2 * app.baseFontSize
+                font.family: app.config.mainFontFamily.name
+                font.pixelSize: 1.2 * app.config.baseFontSize
                 font.bold: true
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Text.AlignHCenter
-                color: app.appLabelColor
+                color: app.config.appLabelColor
             }
 
             Text {
@@ -364,20 +355,20 @@ Item {
                 anchors.top: appTitle.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.margins: app.defaultMargins
-                font.family: app.mainFontFamily.name
-                font.pixelSize: 1 * app.baseFontSize
+                anchors.margins: app.config.defaultMargins
+                font.family: app.config.mainFontFamily.name
+                font.pixelSize: 1 * app.config.baseFontSize
                 wrapMode: Text.WordWrap
             }
 
             Text {
                 width: 0.99 * parent.width
                 text: qsTr("Data Source")
-                anchors.margins: app.defaultMargins
-                font.family: app.mainFontFamily.name
-                font.pixelSize: 0.6 * app.baseFontSize
+                anchors.margins: app.config.defaultMargins
+                font.family: app.config.mainFontFamily.name
+                font.pixelSize: 0.6 * app.config.baseFontSize
                 font.bold: true
-                color: app.appLabelColor
+                color: app.config.appLabelColor
                 anchors.bottom: dataSource.top
                 anchors.left: parent.left
                 wrapMode: Text.WordWrap
@@ -386,9 +377,9 @@ Item {
                 id: dataSource
                 width: 0.99 * parent.width
                 text: qsTr("NASA LANCE ‐ FIRMS, 2012. MODIS Active Fire Detections. Data set.")
-                anchors.margins: app.defaultMargins
-                font.family: app.mainFontFamily.name
-                font.pixelSize: 0.6 * app.baseFontSize
+                anchors.margins: app.config.defaultMargins
+                font.family: app.config.mainFontFamily.name
+                font.pixelSize: 0.6 * app.config.baseFontSize
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
                 wrapMode: Text.WordWrap
@@ -400,17 +391,17 @@ Item {
         id: hourSlider
 
         z: 10
-        color: app.secondaryColor
+        color: app.config.secondaryColor
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
         width:  parent.width * 0.995
-        height: 60 * app.scaleFactor
-        border.color: app.themeColor
-        border.width: 1 * app.scaleFactor
+        height: app.config.scale(60)
+        border.color: app.config.themeColor
+        border.width: app.config.scale(1)
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: false
-            color: app.shadowColor
+            color: app.config.shadowColor
             verticalOffset: 2
             horizontalOffset: 1
             samples: 20
@@ -435,7 +426,7 @@ Item {
 
             anchors.top: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.margins: app.defaultMargins * 1.5
+            anchors.margins: app.config.defaultMargins * 1.5
 
             tickmarksEnabled : true
             updateValueWhileDragging : false
@@ -461,9 +452,9 @@ Item {
             style: SliderStyle {
                 groove: Rectangle {
                     implicitWidth: parent.width
-                    implicitHeight: 5 * app.scaleFactor
-                    border.color: app.themeColor
-                    border.width: 1 * app.scaleFactor
+                    implicitHeight: app.config.scale(5)
+                    border.color: app.config.themeColor
+                    border.width: app.config.scale(1)
                     LinearGradient {
                         anchors.fill: parent
                         start: Qt.point(0, 0)
@@ -473,16 +464,16 @@ Item {
                             GradientStop { position: 1.0; color: "yellow" }
                         }
                     }
-                    radius: 4 * app.scaleFactor
+                    radius: app.config.scale(4)
                 }
                 handle: Rectangle {
                     anchors.centerIn: parent
-                    color: control.pressed ? app.secondaryColor : "white"
-                    border.color: app.themeColor
-                    border.width: 1 * app.scaleFactor
-                    implicitWidth: 15 * app.scaleFactor
-                    implicitHeight: 15 * app.scaleFactor
-                    radius: 4 * app.scaleFactor
+                    color: control.pressed ? app.config.secondaryColor : "white"
+                    border.color: app.config.themeColor
+                    border.width: app.config.scale(1)
+                    implicitWidth: app.config.scale(15)
+                    implicitHeight: app.config.scale(15)
+                    radius: app.config.scale(4)
                 }
             }
 
@@ -490,24 +481,24 @@ Item {
                 id: leftValueMarker
                 anchors.horizontalCenter: parent.left
                 anchors.top: parent.bottom
-                anchors.topMargin: 0.6 * app.defaultMargins
-                font.pixelSize: 14 * app.scaleFactor
+                anchors.topMargin: 0.6 * app.config.defaultMargins
+                font.pixelSize: app.config.scale(14)
                 font.bold: true
                 text: slider.minimumValue === 1? 1 + " hour" : slider.minimumValue + " hours"
-                font.family: app.mainFontFamily.name
-                color: app.darkerThemeColor
+                font.family: app.config.mainFontFamily.name
+                color: app.config.darkerThemeColor
             }
 
             Text {
                 id: rightValueMarker
                 anchors.horizontalCenter: parent.right
                 anchors.top: parent.bottom
-                anchors.topMargin: 0.6 * app.defaultMargins
-                font.pixelSize: 14 * app.scaleFactor
+                anchors.topMargin: 0.6 * app.config.defaultMargins
+                font.pixelSize: app.config.scale(14)
                 font.bold: true
                 text: slider.maximumValue + " hours"
-                font.family: app.mainFontFamily.name
-                color: app.darkerThemeColor
+                font.family: app.config.mainFontFamily.name
+                color: app.config.darkerThemeColor
             }
 
             onValueChanged: {
@@ -558,9 +549,9 @@ Item {
 
         PictureMarkerSymbol {
             id: fireSymbol
-            image: app.imgFolder.arg("fire_12.png")
-            width: 9 * app.scaleFactor
-            height: 9 *app.scaleFactor
+            image: app.config.imgFolder.arg("fire_12.png")
+            width: app.config.scale(9)
+            height: app.config.scale(9)
         }
 
         MultiPoint {
@@ -572,11 +563,11 @@ Item {
             }
         }
 
-        ModalWindow {
+        ModalWindow.ModalWindow {
             id: modal
-            scaleFactor: app.scaleFactor
-            shadowColor: app.shadowColor
-            backgroundColor: app.secondaryColor
+            scaleFactor: app.config.scale(1)
+            shadowColor: app.config.shadowColor
+            backgroundColor: app.config.secondaryColor
         }
 
         DropShadow {
@@ -587,7 +578,7 @@ Item {
             radius: 8
             samples: 16
             opacity: 0.75
-            color: app.shadowColor
+            color: app.config.shadowColor
             visible: false
             MouseArea {
                 anchors.fill: parent
@@ -621,19 +612,19 @@ Item {
                 modal.dataModel.clear()
 
                 for (var i in graphics) {
-                    var feature = graphics[i]
-                    var model_data = {"index": i+1}
-                    var attr = feature.attributes
+                    var feature = graphics[i],
+                        model_data = {"index": i+1},
+                        attr = feature.attributes,
+                        satellite = attr.satellite === "A" ? "Satellite platform = Aqua" : "Satellite platform = Terra",
+                        frp = "Fire radiative power = " + attr.frp + "MW"
 
                     selectGraphic(feature.uniqueId)
-                    model_data["satellite"] = attr.satellite
-                    model_data["confidence"] = attr.confidence
-                    model_data["acq_datetime"] = attr.acq_datetime
-                    model_data["record_age"] = attr.record_age
-                    model_data["frp"] = attr.frp
-                    model_data["longitude"] = attr.longitude
-                    model_data["latitude"] = attr.latitude
-                    model_data["img_path"] = "../%1".arg(app.imgFolder.arg("fire_%1.png".arg(attr.record_age)))
+                    model_data["img_path"] = "../../%1".arg(app.config.imgFolder.arg("fire_%1.png".arg(attr.record_age)))
+                    model_data["record_title"] = attr.record_age === 1 ? "Detected ~1 hour ago" : "Detected ~" + attr.record_age + " hours ago"
+                    model_data["description"] = "<p>Location -> (%1°, %2°)</p><br/>".arg(attr.latitude).arg(attr.longitude) +
+                                                "<p>Detection Confidence = %1%</p><br/>".arg(attr.confidence) +
+                                                "<p>%1</p><br/><p>%2</p>".arg(satellite).arg(frp)
+
                     modal.dataModel.append(model_data)
                 }
                 mapPage.defaultView() // First hide other open windows
@@ -647,7 +638,7 @@ Item {
 
         onStatusChanged: {
             if(status === Enums.MapStatusReady) {
-                getData(app.dataUrl)
+                getData(app.config.dataUrl)
             }
         }
 
@@ -682,7 +673,7 @@ Item {
                 attr["longitude"] = pt_str[0]
                 attr["latitude"] = pt_str[1]
                 graphic.attributes = attr
-                fireSymbol.image = app.imgFolder.arg("fire_%1.png".arg(attr.record_age))
+                fireSymbol.image = app.config.imgFolder.arg("fire_%1.png".arg(attr.record_age))
                 graphic.symbol = fireSymbol
                 mp.add(graphic.geometry)
                 mainGraphicLayer.addGraphic(graphic)

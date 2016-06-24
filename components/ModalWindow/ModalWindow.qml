@@ -2,25 +2,25 @@ import QtQuick 2.3
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.2
 import QtGraphicalEffects 1.0
-import QtQuick.Controls.Styles 1.2
 
 
 Item {
     id: modalWindow
 
     property alias dataModel: dataModel
-    property double scaleFactor: 1.00
     property color titleBackGroundColor: "#3E2723"
     property color backgroundColor: "#EFEBE9"
-    property color titleTextColor: "white"
+    property color titleTextColor: "#FFFFFF"
     property color shadowColor: Qt.rgba(0, 0, 0, 0.2)
+    property double scaleFactor: 1.00
+    property double baseFontSize: 18 * scaleFactor
     property real shadowVerticalOffset: 5
     property real shadowHorizontalOffset: 5
     property real defaultMargins: 8 * scaleFactor
-    property double baseFontSize: 18 * scaleFactor
 
     width: Math.min(parent.width/1.2, 350 * scaleFactor)
     height: Math.min(0.8 * parent.height, 400 * scaleFactor)
+
     anchors.centerIn: parent
     opacity: visible ? 1 : 0
     visible: false
@@ -36,8 +36,8 @@ Item {
         anchors.fill: modalWindow
         horizontalOffset: shadowHorizontalOffset
         verticalOffset: shadowVerticalOffset
-        radius: 8.0
-        samples: 16
+        radius: 1.0
+        samples: 2
         color: shadowColor
         source: modalWindow
     }
@@ -72,7 +72,7 @@ Item {
 
             Text {
                 id: titleText
-                text: dataModel.count > 1 ? dataModel.count + " Points Selected" : dataModel.count + " Point Selected"
+                text: dataModel.count > 1 ? dataModel.count + qsTr(" Points Selected") : dataModel.count + qsTr(" Point Selected")
                 textFormat: Text.StyledText
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
@@ -141,9 +141,9 @@ Item {
                 clip: true
                 delegate: Rectangle {
                     width: modalWindow.width
-                    height: headerBar.height * 2
+                    height: headerBar.height * 2.5
                     border.color: titleBackGroundColor
-                    color: "white"
+                    color: "#FFFFFF"
                     Image {
                         id: ptSymbol
                         width: 11.2 * scaleFactor
@@ -153,6 +153,7 @@ Item {
                         anchors.margins: defaultMargins
                         source: img_path
                     }
+
                     Text {
                         id: listTitle
                         anchors.top: parent.top
@@ -160,52 +161,21 @@ Item {
                         anchors.margins: defaultMargins * 0.8
                         font.pixelSize: baseFontSize * 0.7
                         font.bold: true
-                        text: record_age === 1 ? "Detected ~1 hour ago" : "Detected ~" + record_age + " hours ago"
+                        text: record_title
                         wrapMode: Text.WordWrap
                         width: parent.width * 0.8
                     }
-                    children: [
-                        Text {
-                            id: listItem1
-                            anchors.top: listTitle.bottom
-                            anchors.margins: defaultMargins * 0.8
-                            anchors.left: listTitle.left
-                            font.pixelSize: baseFontSize * 0.7
-                            text: "Location -> (%1°, %2°)".arg(latitude).arg(longitude)
-                            wrapMode: Text.WordWrap
-                            width: parent.width * 0.9
-                        },
-                        Text {
-                            id: listItem2
-                            anchors.top: listItem1.bottom
-                            anchors.margins: defaultMargins * 0.8
-                            anchors.left: listTitle.left
-                            font.pixelSize: baseFontSize * 0.7
-                            text: "Detection Confidence = %1%".arg(confidence)
-                            wrapMode: Text.WordWrap
-                            width: parent.width * 0.9
-                        },
-                        Text {
-                            id: listItem3
-                            anchors.top: listItem2.bottom
-                            anchors.margins: defaultMargins * 0.8
-                            anchors.left: listTitle.left
-                            font.pixelSize: baseFontSize * 0.7
-                            text: satellite === "A" ? "Satellite platform = Aqua" : "Satellite platform = Terra"
-                            wrapMode: Text.WordWrap
-                            width: parent.width * 0.9
-                        },
-                        Text {
-                            id: listItem4
-                            anchors.top: listItem3.bottom
-                            anchors.margins: defaultMargins * 0.8
-                            anchors.left: listTitle.left
-                            font.pixelSize: baseFontSize * 0.7
-                            text: "Fire radiative power = " + frp + "MW"
-                            wrapMode: Text.WordWrap
-                            width: parent.width * 0.9
-                        }
-                    ]
+
+                    Text {
+                        id: listItem1
+                        anchors.top: listTitle.bottom
+                        anchors.margins: defaultMargins * 0.8
+                        anchors.left: listTitle.left
+                        font.pixelSize: baseFontSize * 0.7
+                        text: description
+                        wrapMode: Text.WordWrap
+                        width: parent.width * 0.9
+                    }
                 }
             }
         }

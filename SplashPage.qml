@@ -18,13 +18,13 @@ Item {
         Rectangle {
             id: background
             anchors.fill: parent
-            color: app.backgroundColor
+            color: app.config.backgroundColor
 
             BusyIndicator {
                 id: busyIndicator
                 //running: image.status === Image.Loading
                 anchors.top: parent.top
-                anchors.margins: app.defaultMargins * 10
+                anchors.margins: app.config.defaultMargins * 10
                 anchors.horizontalCenter: parent.horizontalCenter
             }
 
@@ -38,16 +38,16 @@ Item {
             Text {
                 id: versionText
                 anchors.top: logo.bottom
-                anchors.margins: app.defaultMargins
+                anchors.margins: app.config.defaultMargins
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: parent.width
                 horizontalAlignment: Text.AlignHCenter
-                text: "%1 %2".arg(app.appName).arg(app.info.version)
-                font.family: app.mainFontFamily.name
-                font.pixelSize: 1.5 * app.baseFontSize
+                text: "%1 %2".arg(app.config.appName).arg(app.info.version)
+                font.family: app.config.mainFontFamily.name
+                font.pixelSize: 1.5 * app.config.baseFontSize
                 font.bold: true
                 wrapMode: Text.WordWrap
-                color: app.appLabelColor
+                color: app.config.appLabelColor
             }
         }
     }
