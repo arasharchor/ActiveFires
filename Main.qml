@@ -33,17 +33,9 @@ App {
         id: config
     }
 
-    StackView {
-        id: stackview
-        anchors.fill: parent
-        initialItem: splashPage
-    }
-
-    Component {
+    SplashPage {
         id: splashPage
-        SplashPage {
-            anchors.fill: parent
-        }
+        anchors.fill: parent
     }
 
 }

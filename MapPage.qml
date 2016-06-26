@@ -421,7 +421,7 @@ Item {
 
         Slider {
             id: slider
-            property int maxValue: 12
+            property int maxValue: 6
             property int initialValue: maxValue
 
             anchors.top: parent.top
